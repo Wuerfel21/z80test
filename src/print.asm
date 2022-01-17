@@ -5,8 +5,9 @@
 ; This source code is released under the MIT license, see included license.txt.
 
 
-printinit:  ld      a,2
-            jp      0x1601      ; CHAN-OPEN
+printinit:  ld a,0
+            out (0),a
+            ret
 
 
 print:      ex      (sp),hl
@@ -70,8 +71,8 @@ printchr:   push    iy
             push    bc
             exx
             ei
-            ; out     (0xff),a
-            rst     0x10
+             out     (0),a
+            ;rst     0x10
             di
             exx
             pop     bc

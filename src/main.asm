@@ -4,7 +4,11 @@
 ;
 ; This source code is released under the MIT license, see included license.txt.
 
-            org     0x8000
+            org     0
+            halt
+            ds 255
+            jp $8000
+            ds $7EFD
 
 main:       di                                  ; disable interrupts
             push    iy                          ; preserve stuff needed by BASIC
@@ -17,7 +21,7 @@ main:       di                                  ; disable interrupts
             db      "Z80 "
             testname
             db      " test"
-            db      23,32-13,1,127," 2012 RAXOFT",13,13,0
+            db      " - 2012 RAXOFT",13,13,0
 
             ld      bc,0                        ; setup for test loop
             ld      hl,testtable
@@ -69,6 +73,7 @@ main:       di                                  ; disable interrupts
             exx
             pop     iy
             ei
+            halt
             ret
 
 .test       push    bc                          ; preserve number of failures
@@ -95,7 +100,7 @@ main:       di                                  ; disable interrupts
             jr      nz,.pass
 
             call    print                       ; print that the test was skipped
-            db      23,32-7,1,"Skipped",13,0
+            db      "Skipped",13,0
 
             ret                                 ; return success
 
@@ -107,14 +112,14 @@ main:       di                                  ; disable interrupts
             ld      e,a
 
             call    print                       ; print the IN mismatch message
-            db      23,32-6,1,"FAILED",13
+            db      "  FAILED",13
             db      "IN FE:",0
 
             ld      a,e
             call    printhexa
 
             call    print
-            db      23,32-11,1,"Expected:BF",13,0
+            db      "Expected:BF",13,0
 
             inc     a                           ; return failure
             ret
@@ -145,12 +150,12 @@ main:       di                                  ; disable interrupts
             jr      nz,.mismatch                ; check for mismatch
 
             call    print                       ; print success
-            db      23,32-2,1,"OK",13,0
+            db      "  OK",13,0
 
             ret                                 ; return success
 
 .mismatch   call    print                       ; print mismatched and expected CRC
-            db      23,32-6,1,"FAILED",13
+            db      "  FAILED",13
             db      "CRC:",0
 
             call    printcrc
