@@ -185,6 +185,9 @@ main:       di                                  ; disable interrupts
             ret
 
             include print.asm
+
+            align   256
+
             include idea.asm
             include tests.asm
 
